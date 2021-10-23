@@ -16,19 +16,17 @@ app.use(bodyParser.json());
 
 // @dev mongo db config
 const mongoose = require("mongoose");
-// mongoose.connect(
-//   process.env.MONGO_DB_URI,
-//   {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useFindAndModify: false,
-//     useCreateIndex: true,
-//   },
-//   (err) => {
-    // if (err) return console.log(err);
-    // else console.log("Database Connected => SSC-Distributor...");
-//   }
-// );
+mongoose.connect(
+  process.env.MONGO_DB_URI,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  },
+  (err) => {
+    if (err) return console.log(err);
+    else console.log("Database Connected => MeroBhav Core...");
+  }
+);
 
 // @dev handling 404 api request from client
 app.use((req, res) => {

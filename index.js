@@ -2,6 +2,7 @@ const cluster = require("cluster");
 const http = require("http");
 const numCPUs = require("os").cpus().length;
 const process = require("process");
+require('dotenv').config()
 
 if (cluster.isPrimary) {
   console.log(`Primary ${process.pid} is running`);
