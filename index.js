@@ -18,7 +18,8 @@ if (cluster.isPrimary) {
 } else {
   // Workers can share any TCP connection
   // In this case it is an HTTP server
-  http.createServer(require("./app")).listen(process.env.PORT || 4000);
+  // "0.0.0.0" refers when hosted the server can be requested from anywhere
+  http.createServer(require("./app")).listen(process.env.PORT || 4000, "0.0.0.0");
 
   console.log(`Worker ${process.pid} started`);
 }
