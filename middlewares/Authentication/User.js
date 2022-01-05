@@ -1,3 +1,4 @@
+/** @models */
 const UserAuth = require("../../models/UserAuth");
 const VerifiedTokens = require("../../models/VerifiedTokens");
 
@@ -7,7 +8,10 @@ module.exports = {
    */
   createNewUserMiddleware: (req, res, next) => {
     /**
-     * @dev check if all the required fields are present except email
+     * @dev Algorithm to validate new user
+     * * 1. Use Regex for Email, Password
+     * * 2. Check if everything is valid and !null
+     * * 3. Continue
      */
     next();
   },
@@ -18,8 +22,13 @@ module.exports = {
   generateRegistrationTokenMiddleware: async (req, res) => {
     try {
       /**
+       * @dev Algorithm to generate registration token
        * * 1. check if the email is already registered
-       * * 2. generate a token and mail it to the user
+       * * 2. if registered return error
+       * * 3. generate a token 
+       * * 4. save the token in the database
+       * * 5. send the token to the user's email
+       * * 6. return success
        * */
 
       /** @dev check if the email is already registered */
@@ -73,10 +82,16 @@ module.exports = {
     }
   },
 
+  /**
+   * * middleware: validate registration token
+   */
   validateRegistrationTokenMiddleware: (req, res) => {
     /**
-     * * 1. check if token exists
-     * * 2. if valid, go to next step to create user
+     * @dev Algorithm to validate registration token
+     * * 1. findtoken from db
+     * * 2. if token exists, check if it is expired
+     * * 3. if does not exists, return error to client
+     * * 4. else return success
      * */
   },
 };
