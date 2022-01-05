@@ -1,4 +1,4 @@
-/** Inbuilt packages */
+/** @dev Inbuilt packages */
 const crypto = require("crypto");
 
 /**
@@ -15,12 +15,19 @@ const UserAuth = require("../../models/UserAuth");
 
 module.exports = {
   /**
-   * * controller: create new documnet on mongo db collection
+   * Controller: create new documnet on mongo db collection
+   * 
+   * Algorithm:
+   * 1. Get all the data from the request (client)
+   * 2. Hash the password
+   * 3. Save the user & user auth to the database
+   * 4. Return success
    * */
   createNewUser: (req, res) => {
     const { email, full_name, date_of_birth, password } = req.body;
 
-    /** @dev Generate the value with a cryptographically
+    /** 
+     * @dev Generate the value with a cryptographically
      * strong random number generator and do not hardcode it in source code.
      * * Recommended from Snyk Vulnerability Scanner
      * */
@@ -57,27 +64,27 @@ module.exports = {
   },
 
   /**
-   * * controller: get user details
+   * Controller: get user details
    * */
   getUserDetails: (req, res) => {},
 
   /**
-   * * controller: get user auth details
+   * Controller: get user auth details
    * */
   getUserAuthDetails: (req, res) => {},
 
   /**
-   * * controller: update user details
+   * Controller: update user details
    * */
   updateUserDetails: (req, res) => {},
 
   /**
-   * * controller: update user auth details
+   * Controller: update user auth details
    * */
   updateUserAuthDetails: (req, res) => {},
 
   /**
-   * * controller: delete user details
+   * Controller: delete user details
    * 1. Delete Users Table
    * 2. Delete UserAuth Table
    * */
