@@ -44,8 +44,8 @@ mongoose.connect(
   /**
    * @dev Routers Configuration
    */
-const ExampleRouter = require("./routes/ExampleRoute");
-app.use("/api", ExampleRouter)
+  const AuthRouter = require("./routes/Authentication/Auth");
+app.use("/api/auth", AuthRouter);
 
 /**
  * @dev handling 404 api request from client
