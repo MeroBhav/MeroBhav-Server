@@ -1,8 +1,14 @@
 const express = require("express");
+const {
+  userAuthentication,
+} = require("../../controllers/Authentication/Login");
 const AuthRouter = express.Router();
 
 /** controllers */
 const { createNewUser } = require("../../controllers/Authentication/User");
+const {
+  userExistsOnAuthenticationMiddleware,
+} = require("../../middlewares/Authentication/Login");
 
 /** middlewares */
 const {
@@ -16,6 +22,11 @@ AuthRouter.post(
   generateRegistrationTokenMiddleware
 )
   .post("/validate_registration_token", validateRegistrationTokenMiddleware)
-  .post("/new_user", createNewUserMiddleware, createNewUser);
+  .post("/new_user", createNewUserMiddleware, createNewUser)
+  .post(
+    "/authentication",
+    userExistsOnAuthenticationMiddleware,
+    userAuthentication
+  );
 
 module.exports = AuthRouter;
