@@ -8,6 +8,7 @@ const AuthRouter = express.Router();
 const { createNewUser } = require("../../controllers/Authentication/User");
 const {
   userExistsOnAuthenticationMiddleware,
+  verifyTokenMiddleware,
 } = require("../../middlewares/Authentication/Login");
 
 /** middlewares */
@@ -27,6 +28,8 @@ AuthRouter.post(
     "/authentication",
     userExistsOnAuthenticationMiddleware,
     userAuthentication
-  );
+  )
+  // @dev verifyTokenMiddleware is only used for protected routes
+  // .post("/token_protected", verifyTokenMiddleware);
 
 module.exports = AuthRouter;
