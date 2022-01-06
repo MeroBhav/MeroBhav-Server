@@ -6,6 +6,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cron = require("node-cron");
 
 const app = express();
 
@@ -67,7 +68,15 @@ mongoose.connect(
  * @dev Routers Configuration
  */
 const AuthRouter = require("./routes/Authentication/Auth");
-app.use("/api/auth", csrfProtection, AuthRouter);
+/** 
+ * @dev For Production
+ * REST API has been designed to be used in a browser
+ * security feature that ensures that external websites cannot call this endpoint
+ */
+
+// app.use("/api/auth", csrfProtection, AuthRouter);
+// @dev development
+app.use("/api/auth", AuthRouter);
 
 /**
  * @dev handling 404 api request from client

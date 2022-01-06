@@ -25,7 +25,7 @@ module.exports = {
        * @dev Algorithm to generate registration token
        * * 1. check if the email is already registered
        * * 2. if registered return error
-       * * 3. generate a token 
+       * * 3. generate a token
        * * 4. save the token in the database
        * * 5. send the token to the user's email
        * * 6. return success
@@ -43,13 +43,19 @@ module.exports = {
 
       /** @dev generate a token and mail it to the user */
       const crypto = require("crypto");
-      const token = await crypto.randomInt(9999, 99999);
+      const token = await crypto.randomInt(100000, 999999);
 
       // create 5 minute time
       let currentDate = new Date(),
         expiryDate = new Date(currentDate);
       expiryDate.setMinutes(currentDate.getMinutes() + 5);
-      
+
+      /** @dev response success on mail sent */
+      res.status(200).json({
+        message: "Success",
+        status: 200,
+      });
+
       await VerifiedTokens.create({ token, expires_at: expiryDate });
 
       const nodemailer = require("nodemailer");
@@ -71,12 +77,6 @@ module.exports = {
         subject: "Email Verification Code 🔥",
         html: `${token} is your MeroBhav verification code. This code will be valid for 5 minutes. Don't share this code with anyone.`,
       });
-
-      /** @dev response success on mail sent */
-      res.status(200).json({
-        message: "Success",
-        status: 200,
-      });
     } catch (error) {
       console.log(error);
     }
@@ -85,13 +85,46 @@ module.exports = {
   /**
    * * middleware: validate registration token
    */
-  validateRegistrationTokenMiddleware: (req, res) => {
+  validateRegistrationTokenMiddleware: async (req, res) => {
     /**
      * @dev Algorithm to validate registration token
      * * 1. findtoken from db
      * * 2. if token exists, check if it is expired
      * * 3. if does not exists, return error to client
      * * 4. else return success
+     * * 5. remove token from db
      * */
+    try {
+      const { token } = req.body;
+      console.log(token);
+
+      const tokenExists = await VerifiedTokens.findOne({ token });
+
+      if (!tokenExists)
+        return res.status(404).json({
+          message: "Token does not exist!",
+          status: 404,
+        });
+
+      const currentDate = new Date();
+      if (currentDate > tokenExists.expires_at) {
+        res.status(401).json({
+          message: "Token has expired!",
+          status: 401,
+        });
+
+        return await VerifiedTokens.deleteOne({ token });
+      }
+
+      /** @dev response success */
+      res.status(200).json({
+        message: "Valid",
+        status: 200,
+      });
+
+      await VerifiedTokens.deleteOne({ token });
+    } catch (error) {
+      console.log(error);
+    }
   },
 };
